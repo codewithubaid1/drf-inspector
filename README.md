@@ -85,6 +85,12 @@ Useful for:
 
 ---
 
+## 🔗 Links
+- GitHub: https://github.com/codewithubaid1/drf-inspector
+- PyPI: https://pypi.org/project/drf-inspector/
+---
+
+
 # 📸 Screenshots
 
 ## Dashboard
@@ -123,7 +129,7 @@ Useful for:
 
 ## Step 1: Install the package
 ```bash
-pip install drf-inspector==0.1.2
+pip install drf-inspector==0.1.3
 ```
 
 ## Step 2: Add in settings.py:

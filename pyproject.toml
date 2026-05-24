@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "drf-inspector"
-version = "0.1.2"
+version = "0.1.3"
 description = "A comprehensive Django app that provides visualization and analysis of your DRF backend."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
 license = { text = "MIT" }
 
 authors = [
-    { name = "DRF Inspector Contributors", email = "your.email@example.com" }
+    { name = "UbaidUllah", email = "ubaidrao22388@gmail.com" }
 ]
 
 urls = { Homepage = "https://github.com/codewithubaid1/drf-inspector" }
