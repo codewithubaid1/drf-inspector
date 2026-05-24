@@ -129,7 +129,7 @@ Useful for:
 
 ## Step 1: Install the package
 ```bash
-pip install drf-inspector==0.1.3
+pip install drf-inspector==0.1.4
 ```
 
 ## Step 2: Add in settings.py:
