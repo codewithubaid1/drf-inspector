@@ -1,0 +1,209 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        DRF Statistics
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Project overview and API statistics.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- MAIN STATS -->
+
+<div class="
+    grid
+    grid-cols-1
+    md:grid-cols-4
+    gap-6
+    mb-8
+">
+
+    <!-- ENDPOINTS -->
+
+    <div class="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+    ">
+
+        <div class="
+            text-gray-500
+            text-sm
+        ">
+            Total APIs
+        </div>
+
+        <div class="
+            text-4xl
+            font-bold
+            mt-2
+        ">
+            {{ stats.total_endpoints }}
+        </div>
+
+    </div>
+
+
+    <!-- MODELS -->
+
+    <div class="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+    ">
+
+        <div class="
+            text-gray-500
+            text-sm
+        ">
+            Models
+        </div>
+
+        <div class="
+            text-4xl
+            font-bold
+            mt-2
+        ">
+            {{ stats.total_models }}
+        </div>
+
+    </div>
+
+
+    <!-- SERIALIZERS -->
+
+    <div class="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+    ">
+
+        <div class="
+            text-gray-500
+            text-sm
+        ">
+            Serializers
+        </div>
+
+        <div class="
+            text-4xl
+            font-bold
+            mt-2
+        ">
+            {{ stats.total_serializers }}
+        </div>
+
+    </div>
+
+
+    <!-- RELATIONSHIPS -->
+
+    <div class="
+        bg-white
+        rounded-2xl
+        shadow
+        p-6
+    ">
+
+        <div class="
+            text-gray-500
+            text-sm
+        ">
+            Relationships
+        </div>
+
+        <div class="
+            text-4xl
+            font-bold
+            mt-2
+        ">
+            {{ stats.total_relationships }}
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- METHODS -->
+
+<div class="
+    bg-white
+    rounded-2xl
+    shadow
+    p-6
+">
+
+    <h2 class="
+        text-2xl
+        font-bold
+        mb-6
+    ">
+        HTTP Methods
+    </h2>
+
+    <div class="
+        grid
+        grid-cols-2
+        md:grid-cols-5
+        gap-4
+    ">
+
+        {% for method, count in stats.methods.items %}
+
+        <div class="
+            border
+            rounded-xl
+            p-4
+            text-center
+        ">
+
+            <div class="
+                text-sm
+                text-gray-500
+            ">
+                {{ method }}
+            </div>
+
+            <div class="
+                text-2xl
+                font-bold
+                mt-2
+            ">
+                {{ count }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

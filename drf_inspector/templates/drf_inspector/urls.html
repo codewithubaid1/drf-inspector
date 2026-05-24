@@ -1,0 +1,228 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        API Endpoints
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Explore your DRF API endpoints and their configurations.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- SEARCH -->
+<input
+    id="searchInput"
+    type="text"
+    placeholder="Search endpoint..."
+    class="
+        w-full
+        p-3
+        border
+        rounded-xl
+        mb-6
+    "
+>
+
+<!-- ENDPOINTS -->
+<div
+    id="endpointContainer"
+    class="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-4
+    "
+>
+
+    {% for endpoint in endpoints %}
+
+    <div class="
+        endpoint-card
+        bg-white
+        rounded-2xl
+        shadow
+        p-5
+        border
+    ">
+
+        <!-- PATH -->
+
+        <div class="mb-3">
+
+            <div class="
+                text-sm
+                text-gray-500
+            ">
+                Endpoint
+            </div>
+
+            <div class="
+                font-mono
+                text-blue-600
+                break-all
+            ">
+                /{{ endpoint.path }}
+            </div>
+
+        </div>
+
+
+        <!-- METHODS -->
+
+        <div class="mb-3">
+
+            <div class="
+                text-sm
+                text-gray-500
+                mb-1
+            ">
+                Methods
+            </div>
+
+            <div class="flex gap-2 flex-wrap">
+
+                {% for method in endpoint.methods %}
+
+                <span class="
+                    px-2
+                    py-1
+                    rounded-lg
+                    text-xs
+                    font-bold
+                    bg-gray-200
+                ">
+                    {{ method }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- VIEW -->
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                View:
+            </span>
+
+            <span class="font-semibold">
+                {{ endpoint.view }}
+            </span>
+
+        </div>
+
+
+        <!-- SERIALIZER -->
+
+        {% if endpoint.serializers %}
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Serializer:
+            </span>
+
+            <span class="font-semibold">
+                {{ endpoint.serializers }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- MODEL -->
+
+        {% if endpoint.model %}
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Model:
+            </span>
+
+            <span class="font-semibold">
+                {{ endpoint.model }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        )
+
+    const cards =
+        document.querySelectorAll(
+            ".endpoint-card"
+        )
+
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                this.value.toLowerCase()
+
+            cards.forEach(card => {
+
+                if (
+                    card.innerText
+                    .toLowerCase()
+                    .includes(value)
+                ) {
+
+                    card.style.display =
+                        "block"
+
+                }
+
+                else {
+
+                    card.style.display =
+                        "none"
+                }
+            })
+        }
+    )
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        Architecture Dashboard
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Explore and analyze your DRF backend.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a href="{% url 'drf_inspector:export_json' %}" class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm">
+        Download JSON
+    </a>
+    <a href="{% url 'drf_inspector:export_markdown' %}" class="px-4 py-2 rounded-xl bg-white border text-sm">
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- URLs Explorer -->
+    <a href="{% url 'drf_inspector:urls_page' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    URLs Explorer
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    Explore API endpoints and methods.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="route" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- Serializers -->
+    <a href="{% url 'drf_inspector:serializers_page' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    Serializers
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    Analyze serializer fields and nesting.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="boxes" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- Models Graph -->
+    <a href="{% url 'drf_inspector:models_page' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    Models Graph
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    View model relationships visually.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="network" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- Query Analysis -->
+    <a href="{% url 'drf_inspector:query_page' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    Query Analysis
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    Detect possible optimization issues.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="activity" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- JSON Export -->
+    <a href="{% url 'drf_inspector:export_json' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    JSON Export
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    Export architecture as JSON.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="download" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+    <!-- Markdown Export -->
+    <a href="{% url 'drf_inspector:export_markdown' %}" class="bg-white rounded-2xl shadow p-6 hover:shadow-xl transition">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <h3 class="text-xl font-bold text-gray-800">
+                    Markdown Export
+                </h3>
+                <p class="text-gray-500 mt-2 text-sm">
+                    Generate shareable documentation.
+                </p>
+            </div>
+            <div class="ml-4 text-gray-400">
+                <i data-lucide="file-text" class="w-8 h-8"></i>
+            </div>
+        </div>
+    </a>
+
+</div>
+
+{% endblock %}

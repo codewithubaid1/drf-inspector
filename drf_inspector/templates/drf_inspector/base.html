@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>
+        DRF Inspecotr
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+    <script src="https://unpkg.com/dagre@0.8.5/dist/dagre.min.js"></script>
+
+    <script src="https://unpkg.com/cytoscape-dagre/cytoscape-dagre.js"></script>
+
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+
+    <!-- NAVBAR -->
+
+    <nav class="sticky top-0 z-50 bg-white border-b shadow-sm">
+
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+
+            <div>
+
+                <h1 class="text-2xl font-bold text-gray-800">
+                    DRF Inspecotr
+                </h1>
+
+                <p class="text-sm text-blue-500">
+                    Django REST Framework Architecture Explorer
+                </p>
+
+            </div>
+
+
+            <div class="flex gap-3 flex-wrap">
+
+                <a href="{% url 'drf_inspector:dashboard' %}" class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm">
+                    Dashboard
+                </a>
+
+                <a href="{% url 'drf_inspector:urls_page' %}" class="px-4 py-2 rounded-xl bg-white border text-sm">
+                    URLs
+                </a>
+
+                <a href="{% url 'drf_inspector:serializers_page' %}" class="px-4 py-2 rounded-xl bg-white border text-sm">
+                    Serializers
+                </a>
+
+                <a href="{% url 'drf_inspector:models_page' %}" class="px-4 py-2 rounded-xl bg-white border text-sm">
+                    Models
+                </a>
+
+                <a href="{% url 'drf_inspector:query_page' %}" class="px-4 py-2 rounded-xl bg-white border text-sm">
+                    Queries
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <!-- TOAST -->
+
+    <div id="toast" class="hidden fixed bottom-5 right-5 bg-black text-white px-4 py-3 rounded-xl shadow-xl z-50">
+        Copied
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <main class="flex-1 max-w-7xl mx-auto p-6 w-full">
+
+        <!-- PAGE HEADER -->
+        {% block page_header %}
+        {% endblock %}
+
+        <!-- ACTION BUTTONS -->
+        {% block action_buttons %}
+        {% endblock %}
+
+        <!-- MAIN CONTENT -->
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+    <footer class="mt-20 border-t bg-white">
+
+        <div class="max-w-7xl mx-auto p-6 text-sm text-gray-500 flex justify-between">
+
+            <div>
+                DRF Inspecotr
+            </div>
+
+            <div>
+                Built with codewithubaid1
+            </div>
+
+        </div>
+
+    </footer>
+
+   
+
+    <script>
+
+        function copyText(text) {
+
+            navigator.clipboard.writeText(text)
+
+            const toast = document.getElementById("toast")
+
+            toast.classList.remove("hidden")
+
+            setTimeout(() => {
+
+                toast.classList.add("hidden")
+
+            }, 2000)
+        }
+
+        lucide.createIcons()
+
+    </script>
+
+</body>
+
+</html>

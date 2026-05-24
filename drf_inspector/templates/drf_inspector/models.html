@@ -1,0 +1,195 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        Model Relationships
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Explore your DRF model structure and relationships.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- GRAPH -->
+<div id="graph" style="
+        width: 100%;
+        height: 90vh;
+    "></div>
+
+<!-- DATA -->
+{{ graph|json_script:"graph-data" }}
+
+<script>
+
+    const graphData =
+        JSON.parse(
+            document.getElementById(
+                "graph-data"
+            ).textContent
+        )
+
+    const elements = []
+
+    // NODES
+    graphData.nodes.forEach(node => {
+
+        elements.push({
+            data: {
+                id: node.id,
+                label: node.id
+            }
+        })
+
+    })
+
+
+    // EDGES
+    graphData.edges.forEach(
+        (edge, index) => {
+
+            elements.push({
+
+                data: {
+
+                    id: "edge-" + index,
+
+                    source: edge.source,
+
+                    target: edge.target,
+
+                    label: edge.label,
+
+                    relationType: edge.type
+                }
+            })
+        })
+
+    cytoscape.use(cytoscapeDagre)
+    const cy = cytoscape({
+
+        container:
+            document.getElementById(
+                "graph"
+            ),
+
+        elements: elements,
+
+        style: [
+
+            // NODES
+            {
+                selector: "node",
+
+                style: {
+
+                    "label":
+                        "data(label)",
+
+                    "text-valign":
+                        "center",
+
+                    "color":
+                        "#fff",
+
+                    "background-color":
+                        "#2563eb",
+
+                    "width":
+                        70,
+
+                    "height":
+                        70,
+
+                    "font-size":
+                        12
+                }
+            },
+
+            // EDGES
+            {
+                selector: "edge",
+
+                style: {
+
+                    "curve-style":
+                        "bezier",
+
+                    "target-arrow-shape":
+                        "triangle",
+
+                    "line-color":
+                        "#999",
+
+                    "target-arrow-color":
+                        "#999",
+
+                    "width":
+                        2,
+
+                    "label":
+                        "data(label)",
+
+                    "font-size":
+                        10,
+
+                    "text-rotation":
+                        "autorotate",
+
+                    "text-margin-y":
+                        -12,
+
+                    "text-background-opacity":
+                        1,
+
+                    "text-background-color":
+                        "#fff",
+
+                    "text-background-padding":
+                        3
+                }
+            }
+        ],
+
+        layout: {
+
+            name: "dagre",
+
+            rankDir: "LR",
+
+            nodeSep: 80,
+
+            edgeSep: 20,
+
+            rankSep: 150,
+
+            animate: true
+        }
+    })
+
+    lucide.createIcons()
+
+</script>
+
+{% endblock %}
+
+</html>

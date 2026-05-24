@@ -1,0 +1,99 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        Query Optimization Detector
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Identify and optimize database queries in your views.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    {% for item in endpoints %}
+
+    <div class="bg-white rounded-2xl shadow p-5">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+
+                <h2 class="text-xl font-bold">
+                    {{ item.view }}
+                </h2>
+
+                <div class="text-blue-600 font-mono mt-1">
+                    /{{ item.path }}
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            {% if item.warnings %}
+
+            <div class="bg-red-100 text-red-700 px-3 py-2 rounded-xl text-sm font-semibold">
+                NEEDS OPTIMIZATION
+            </div>
+
+            {% else %}
+
+            <div class="bg-green-100 text-green-700 px-3 py-2 rounded-xl text-sm font-semibold">
+                OPTIMIZED
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if item.warnings %}
+
+        <div class="mt-4 border border-red-200 bg-red-50 rounded-xl p-4">
+
+            <ul class="list-disc ml-6 text-red-700 space-y-1">
+
+                {% for warning in item.warnings %}
+
+                <li>
+                    {{ warning }}
+                </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

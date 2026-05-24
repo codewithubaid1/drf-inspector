@@ -1,0 +1,2 @@
+recursive-include drf_inspector/templates *
+recursive-include drf_inspector/static *

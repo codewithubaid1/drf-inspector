@@ -1,0 +1,291 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        Views Explorer
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Explore all your DRF views and their configurations.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- SEARCH -->
+<input
+    id="searchInput"
+    type="text"
+    placeholder="Search views..."
+    class="
+        w-full
+        p-3
+        border
+        rounded-xl
+        mb-6
+    "
+>
+
+<!-- CARDS -->
+
+<div class="
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    gap-6
+">
+
+    {% for item in views %}
+
+    <div class="
+        view-card
+        bg-white
+        rounded-2xl
+        shadow
+        p-5
+    ">
+
+        <h2 class="
+            text-xl
+            font-bold
+            mb-4
+        ">
+            {{ item.view }}
+        </h2>
+
+
+        <!-- PATH -->
+
+        <div class="mb-3">
+
+            <div class="
+                text-sm
+                text-gray-500
+            ">
+                Path
+            </div>
+
+            <div class="
+                font-mono
+                text-blue-600
+                break-all
+            ">
+                /{{ item.path }}
+            </div>
+
+        </div>
+
+
+        <!-- METHODS -->
+
+        <div class="mb-3">
+
+            <div class="
+                text-sm
+                text-gray-500
+                mb-1
+            ">
+                Methods
+            </div>
+
+            <div class="
+                flex
+                gap-2
+                flex-wrap
+            ">
+
+                {% for method in item.methods %}
+
+                <span class="
+                    px-2
+                    py-1
+                    rounded-lg
+                    text-xs
+                    font-bold
+                    bg-gray-200
+                ">
+                    {{ method }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- SERIALIZER -->
+
+        {% if item.serializer %}
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Serializer:
+            </span>
+
+            <span class="font-semibold">
+                {{ item.serializer }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- MODEL -->
+
+        {% if item.model %}
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Model:
+            </span>
+
+            <span class="font-semibold">
+                {{ item.model }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- PERMISSIONS -->
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Permissions:
+            </span>
+
+            <span class="font-semibold">
+
+                {% for permission in item.permissions %}
+
+                    {{ permission }}
+
+                {% empty %}
+
+                    None
+
+                {% endfor %}
+
+            </span>
+
+        </div>
+
+
+        <!-- AUTH -->
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Authentication:
+            </span>
+
+            <span class="font-semibold">
+
+                {% for auth in item.authentication %}
+
+                    {{ auth }}
+
+                {% empty %}
+
+                    None
+
+                {% endfor %}
+
+            </span>
+
+        </div>
+
+
+        <!-- PAGINATION -->
+
+        {% if item.pagination %}
+
+        <div class="mb-2">
+
+            <span class="text-gray-500">
+                Pagination:
+            </span>
+
+            <span class="font-semibold">
+                {{ item.pagination }}
+            </span>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        )
+
+    const cards =
+        document.querySelectorAll(
+            ".view-card"
+        )
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                this.value.toLowerCase()
+
+            cards.forEach(card => {
+
+                if (
+                    card.innerText
+                    .toLowerCase()
+                    .includes(value)
+                ) {
+
+                    card.style.display =
+                        "block"
+
+                }
+
+                else {
+
+                    card.style.display =
+                        "none"
+                }
+            })
+        }
+    )
+
+</script>
+
+{% endblock %}

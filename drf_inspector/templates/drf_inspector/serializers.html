@@ -1,0 +1,339 @@
+{% extends "drf_inspector/base.html" %}
+
+{% block page_header %}
+<div class="mb-8">
+    <h2 class="text-4xl font-bold text-blue-500">
+        Serializer Explorer
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Explore and analyze your DRF serializers.
+    </p>
+</div>
+{% endblock %}
+
+{% block action_buttons %}
+<div class="flex gap-3 mb-6 flex-wrap">
+    <a
+        href="{% url 'drf_inspector:export_json' %}"
+        class="px-4 py-2 rounded-xl bg-gray-900 text-white text-sm"
+    >
+        Download JSON
+    </a>
+    <a
+        href="{% url 'drf_inspector:export_markdown' %}"
+        class="px-4 py-2 rounded-xl bg-white border text-sm"
+    >
+        Download Markdown
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- SEARCH -->
+<input
+    id="searchInput"
+    type="text"
+    placeholder="Search serializer or field..."
+    class="
+        w-full
+        p-3
+        border
+        rounded-xl
+        mb-6
+    "
+>
+
+<!-- EMPTY STATE -->
+{% if not serializers %}
+
+<div class="bg-white rounded-2xl shadow p-10 text-center">
+    <h2 class="text-2xl font-bold text-gray-700">
+        No serializers found
+    </h2>
+    <p class="text-gray-500 mt-2">
+        Your project may not contain DRF serializers.
+    </p>
+</div>
+
+{% else %}
+
+<!-- SERIALIZERS -->
+<div
+    class="
+        grid
+        grid-cols-1
+        md:grid-cols-2
+        gap-6
+    "
+>
+
+    {% for serializer in serializers %}
+
+    <div class="
+        serializer-card
+        bg-white
+        rounded-2xl
+        shadow
+        p-5
+    ">
+
+        <!-- NAME HEADER -->
+        <div class="flex justify-between items-start gap-3 mb-4">
+            <div>
+                <h2 class="
+                    text-2xl
+                    font-bold
+                    mb-2
+                ">
+                    {{ serializer.name }}
+                </h2>
+
+                <!-- MODEL -->
+                {% if serializer.model %}
+                <div class="
+                    text-sm
+                    text-gray-500
+                ">
+                    Model:
+                    <span class="font-semibold">
+                        {{ serializer.model }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- COPY BUTTON -->
+            <button
+                onclick="copyText('{{ serializer.name }}')"
+                class="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm"
+            >
+                Copy
+            </button>
+        </div>
+
+        <!-- FIELDS -->
+        <div class="space-y-3">
+
+            {% for field in serializer.fields %}
+
+            <div class="
+                border
+                rounded-xl
+                p-4
+            ">
+
+                <div class="
+                    flex
+                    justify-between
+                    items-start
+                    gap-4
+                ">
+
+                    <!-- LEFT -->
+
+                    <div>
+
+                        <!-- FIELD NAME -->
+
+                        <div class="
+                            font-semibold
+                            text-lg
+                        ">
+                            {{ field.name }}
+                        </div>
+
+
+                        <!-- NESTED -->
+
+                        {% if field.nested_serializer %}
+
+                        <div class="
+                            text-sm
+                            text-purple-600
+                            font-semibold
+                            mt-1
+                        ">
+
+                            Nested:
+                            {{ field.nested_serializer }}
+
+                            {% if field.many %}
+                                (many=True)
+                            {% endif %}
+
+                        </div>
+
+                        {% else %}
+
+                        <div class="
+                            text-sm
+                            text-gray-500
+                            mt-1
+                        ">
+                            {{ field.type }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- FLAGS -->
+
+                    <div class="
+                        flex
+                        flex-wrap
+                        gap-2
+                    ">
+
+                        {% if field.read_only %}
+
+                        <span class="
+                            text-xs
+                            bg-blue-100
+                            text-blue-700
+                            px-2
+                            py-1
+                            rounded-lg
+                        ">
+                            read_only
+                        </span>
+
+                        {% endif %}
+
+
+                        {% if field.write_only %}
+
+                        <span class="
+                            text-xs
+                            bg-red-100
+                            text-red-700
+                            px-2
+                            py-1
+                            rounded-lg
+                        ">
+                            write_only
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- RELATIONSHIPS -->
+
+        {% if serializer.relationships %}
+
+        <div class="mt-6">
+
+            <h3 class="
+                text-lg
+                font-bold
+                mb-3
+            ">
+                Model Relationships
+            </h3>
+
+            <div class="space-y-2">
+
+                {% for relation in serializer.relationships %}
+
+                <div class="
+                    border
+                    rounded-lg
+                    p-3
+                    bg-gray-50
+                ">
+
+                    <div class="
+                        font-semibold
+                    ">
+                        {{ relation.field }}
+                    </div>
+
+                    <div class="
+                        text-sm
+                        text-gray-500
+                    ">
+
+                        {{ relation.type }}
+
+                        →
+
+                        {{ relation.related_model }}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+<!-- SEARCH SCRIPT -->
+<script>
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        )
+
+    const cards =
+        document.querySelectorAll(
+            ".serializer-card"
+        )
+
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            const value =
+                this.value.toLowerCase()
+
+            cards.forEach(card => {
+
+                if (
+                    card.innerText
+                    .toLowerCase()
+                    .includes(value)
+                ) {
+
+                    card.style.display =
+                        "block"
+
+                }
+
+                else {
+
+                    card.style.display =
+                        "none"
+                }
+            })
+        }
+    )
+
+</script>
+
+{% endblock %}
